@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  cat_funny:
+    image: faysalmehedi/cat-funny:v1
+    container_name: cat-funny
+    ports:
+      - 80:80
+
+  python_api:  
+    image: backend
+    build: ./python
+    restart: always
+    ports:
+      - 5000:5000
+    container_name: py-api

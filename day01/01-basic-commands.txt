@@ -1,0 +1,136 @@
+Day 01:
+
+- Installation:
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+- Uninstall:
+
+sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+- General Commands
+
+docker version
+docker system info
+docker help
+docker <command> --help
+
+
+- Run Containers
+docker run example-image:latest
+docker run example-image:latest [--entrypoint] demo-command
+docker run --rm example-image:latest
+docker run -d example-image:latest
+docker run -it example-image:latest
+docker run --name my-container example-image:latest
+docker run --hostname my-container example-image:latest
+docker run --env foo=bar example-image:latest
+docker run --env-file config.env example-image:latest
+docker run -p <host_port>:<container_port> <image_name>
+
+docker run -v /host-directory:/container-directory example-image:latest
+docker run -v data:/data example-image:latest
+
+docker run --network my-network example-image:latest
+docker run --restart unless-stopped example-image:latest
+docker run --privileged example-image:latest
+
+- Managing Container
+docker ps
+docker ps -a
+docker attach <container>
+docker commit <container> new-image:latest
+docker rename <container> <new-name>
+docker inspect <container>
+docker kill <container>
+docker start <container> 
+docker stop <container>
+docker rm <container>
+docker pause <container> 
+docker unpause <container>
+
+- Copy to and From Containers
+docker cp example.txt my-container:/data
+docker cp my-container:/data/example.txt /demo/example.txt
+
+- Execute Commands
+docker exec my-container demo-command
+docker exec -it my-container demo-command
+
+- Access Container Logs
+
+docker logs <container>
+docker logs <container> --follow
+docker logs <container> -n 10
+
+- Container Utilization
+docker stats <container>
+docker top
+
+- Manage Images
+docker images
+docker rmi <image>
+docker tag <image> example-image:latest
+
+- Build Images
+docker build .
+docker build -t example-image:latest .
+docker build -f docker/app-dockerfile
+docker build --build-arg foo=bar .
+docker build --pull .
+docker build --quiet .
+
+- Docker Hub Account
+docker login
+docker logout
+docker search nginx
+
+- Pull and Push Images
+docker push example.com/user/image:latest
+docker pull example.com/user/image:latest
+
+- Manage Networks
+docker create network my-network
+docker create network my-network -d host
+docker network connect <network> <container>
+docker network disconnect <network> <container>
+docker network ls
+docker network rm <network>
+
+- Manage Volumes
+docker volume create my-volume
+docker volume ls
+docker volume rm
+
+- Use Configuration Contexts
+docker context create my-context --host=tcp://host:2376,ca=~/ca-file,cert=~/cert-file,key=~/key-file
+docker context update <context>
+docker context use <context>
+docker context rm <context>
+
+- Scan for Vulnerabilities
+docker scan example-image:latest
+docker scan example-image:latest --file Dockerfile
+docker scan example-image:latest --severity high
+
+- Clean Up Unused Resources
+docker system prune
+docker system prune -a
+docker system prune --volumes
+docker image prune
+docker image prune -a
+docker network prune
+docker volume prune
+docker system df
+
+- Inspect 
+docker inspect --format='{{.State.Pid}}' <container id>
+docker inspect --format='{{.NetworkSettings.IPAddress}}' <container id>
+docker inspect --format='{{ .Config.Image }}' my_container_name
+docker inspect --format='{{json .State.Health}}' <container_id>
+
+
+

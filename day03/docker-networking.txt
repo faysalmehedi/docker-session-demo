@@ -1,0 +1,10 @@
+# bridge network
+docker network create demo-network -d bridge
+docker run -it --rm --name container1 --network demo-network busybox:latest
+docker run -it --rm --name container2 busybox:latest
+
+docker network connect demo-network container2
+docker network disconnect demo-network container2
+
+docker run -d --name nginx --network host nginx:alpine
+docker run -it --rm --network none busybox:latest

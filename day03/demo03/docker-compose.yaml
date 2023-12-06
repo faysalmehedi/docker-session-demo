@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  frontend_server:
+    image: frontend
+    restart: always
+    build: ./reading-list-frontend
+    ports:
+      - 80:80
+    environment:
+      - API_HOST=10.0.0.6
+      - API_PORT=5000
+    
+    container_name: frontend
+    networks:
+      - frontnet
+
+  backend_server:
+    image: backend
+    restart: always
+    build: ./reading-list-backend
+    ports:
+      - 5000:5000
+    environment:
+      POSTGRES_HOST: postgres_server
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: books
+
+    container_name: backend
+    networks:
+      - db_network
+      - frontnet
+    depends_on:
+      - postgres_server
+
+  postgres_server:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: books
+    container_name: postgres_server
+    
+    networks:
+      - db_network
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+
+volumes:
+  db_volume:
+
+networks:
+  db_network:
+  frontnet:

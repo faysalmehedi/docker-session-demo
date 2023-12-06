@@ -1,0 +1,75 @@
+- Advanced Commands:
+
+docker run --cpus=<value> --memory=<value> <image_name>
+docker image prune -f
+docker stats <container_id>
+docker top <container_id>
+docker commit container_id new_image_name
+docker save -o image_name.tar image_name
+docker load -i image_name.tar
+docker export container_id > container_name.tar
+docker import container_name.tar new_image_name
+docker system df
+docker network prune && \
+    docker image prune && \
+    docker volume prune && \
+    docker container prune
+
+docker system prune --volumes -f
+docker system events
+
+- Dockerfile
+
+FROM         image|scratch ---	base image for the build
+MAINTAINER   email         ---	name of the maintainer(metadata).
+COPY         path dst      ---	copy path from the context into the container at location destination(dst)
+ADD          src dst	   ---  same as COPY but untar archives and accepts https urls
+RUN          args..	   ---  run an arbitrary command inside the container
+USER         name	   ---  set the default username
+WORKDIR      path	   ---  set the default working directory
+CMD          args..	   ---  set the default command
+ENV          name value	   ---  set an environment variable
+
+- dockerignore
+
+# Example .dockerignore file
+node_modules
+*.log
+
+- COPY vs. ADD: Know the Differences
+
+# Using COPY
+COPY src/ /app/
+# Using ADD with tar extraction
+ADD src.tar.gz /app/
+
+- Multi-Stage Builds: Streamlining for Production
+
+- Change Your User: Enhancing Security
+
+FROM alpine:latest
+
+# Create a new user and switch to that user
+RUN adduser -D -u 1000 appuser
+USER appuser
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the script to the container and make it executable
+COPY script.sh .
+RUN chmod +x script.sh
+
+# Run the script
+CMD ["./script.sh"]
+
+- Container Health Checks: Ensuring Reliability
+
+# Set the command to start the web server
+CMD ["python", "app.py"]
+
+# Add a healthcheck for the web server
+HEALTHCHECK --interval=5s \\
+            --timeout=5s \\
+            CMD curl --fail <http://localhost:5000/health> || exit 1
+
